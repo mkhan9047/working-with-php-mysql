@@ -5,8 +5,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
     tools:context="com.example.mujahid.working_with_php_mysql.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert Data"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        />
+
+    <LinearLayout
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:id="@+id/edit_name"
+            android:drawableStart="@drawable/ic_person_black_24dp"
+            android:drawablePadding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/edit_father_name"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:hint="Father Name"
+            android:inputType="textPersonName"
+            android:drawableStart="@drawable/ic_father_black_24dp"
+            android:drawablePadding="10dp"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:hint="Email"
+            android:id="@+id/edit_email"
+            android:inputType="textEmailAddress"
+            android:drawableStart="@drawable/ic_email_black_24dp"
+            android:drawablePadding="10dp"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:hint="Phone"
+            android:id="@+id/edit_phone"
+            android:inputType="phone"
+            android:drawableStart="@drawable/ic_phone_black_24dp"
+            android:drawablePadding="10dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       >
+
+       <Switch
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Mobile Data:    "
+           android:id="@+id/dataOnindicator"
+           android:textSize="15sp"
+           android:layout_gravity="start|center_vertical"
+
+           android:layout_marginStart="16dp"
+           />
+
+       <Button
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Save data"
+           android:onClick="onSave"
+           android:layout_marginStart="100dp"
+           android:layout_gravity="center_vertical|end"
+           />
+   </LinearLayout>
 
 </LinearLayout>

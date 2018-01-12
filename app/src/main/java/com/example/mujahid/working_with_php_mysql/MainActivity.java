@@ -8,9 +8,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    EditText name;
+    EditText Father_name;
+    EditText email;
+    EditText phone;
+    List<EditText> editLIst;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,14 +28,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        name = findViewById(R.id.edit_name);
+        Father_name = findViewById(R.id.edit_father_name);
+        email = findViewById(R.id.edit_email);
+        phone = findViewById(R.id.edit_phone);
+
+      editLIst = new ArrayList<>();
+       editLIst.add(name);
+       editLIst.add(Father_name);
+       editLIst.add(email);
+       editLIst.add(phone);
+
     }
 
     @Override
@@ -48,5 +61,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSave(View view) {
+        Validator validator = new Validator(editLIst);
+        if(validator.isValidateSucess()){
+            Toast.makeText(this,"Save Success!",Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this,"Insert empty fields!",Toast.LENGTH_LONG).show();
+        }
     }
 }
