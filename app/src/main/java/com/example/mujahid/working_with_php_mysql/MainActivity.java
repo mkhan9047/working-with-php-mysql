@@ -1,6 +1,13 @@
 package com.example.mujahid.working_with_php_mysql;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +16,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     EditText email;
     EditText phone;
     List<EditText> editLIst;
+    Switch aSwitch;
+    BroadcastReceiver DataInd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         Father_name = findViewById(R.id.edit_father_name);
         email = findViewById(R.id.edit_email);
         phone = findViewById(R.id.edit_phone);
+        aSwitch = findViewById(R.id.dataOnindicator);
 
       editLIst = new ArrayList<>();
        editLIst.add(name);
@@ -39,6 +51,17 @@ public class MainActivity extends AppCompatActivity {
        editLIst.add(email);
        editLIst.add(phone);
 
+      DataInd = new BroadcastReceiver(){
+
+           @Override
+           public void onReceive(Context context, Intent intent) {
+            if(isDataConnected(context)){
+                aSwitch.setChecked(true);
+            }else{
+                aSwitch.setChecked(false);
+            }
+           }
+       };
     }
 
     @Override
@@ -65,10 +88,37 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSave(View view) {
         Validator validator = new Validator(editLIst);
-        if(validator.isValidateSucess()){
-            Toast.makeText(this,"Save Success!",Toast.LENGTH_LONG).show();
+        if(isDataConnected(this)){
+            if(validator.isValidateSucess()){
+                Toast.makeText(this,"Save Success!",Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(this,"Insert empty fields!",Toast.LENGTH_LONG).show();
+            }
         }else {
-            Toast.makeText(this,"Insert empty fields!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Please on your moible data!",Toast.LENGTH_LONG).show();
         }
+
     }
+
+    private boolean isDataConnected(Context context){
+        boolean isConnected = false;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo info = cm.getActiveNetworkInfo();
+
+            isConnected = info != null && info.isConnectedOrConnecting();
+        }
+        return isConnected;
+    }
+
+    public void onResume(){
+        super.onResume();
+        registerReceiver(DataInd,new IntentFilter(Constants.DATA_INDICATOR));
+    }
+
+    public void onPause(){
+        super.onPause();
+        unregisterReceiver(DataInd);
+    }
+
 }
