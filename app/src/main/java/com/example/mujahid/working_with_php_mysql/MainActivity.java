@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,15 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
         Validator validator = new Validator(editLIst);
         if(isDataConnected(this)){
             if(validator.isValidateSucess()){
-                Toast.makeText(this,"Save Success!",Toast.LENGTH_LONG).show();
+                saveOnBackgroud saveOnBackgroud = new saveOnBackgroud();
+                saveOnBackgroud.execute(name.getText().toString(),Father_name.getText().toString(),email.getText().toString(),phone.getText().toString());
             }else {
                 Toast.makeText(this,"Insert empty fields!",Toast.LENGTH_LONG).show();
             }
@@ -119,6 +131,63 @@ public class MainActivity extends AppCompatActivity {
     public void onPause(){
         super.onPause();
         unregisterReceiver(DataInd);
+    }
+
+     class saveOnBackgroud extends AsyncTask<String, Void, String>{
+
+        String add_data_url;
+
+        protected void onPreExecute(){
+            add_data_url = "http://mujahidprojects.000webhostapp.com/add_info.php";
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            String name,email,phone,father_name;
+            name = args[0];
+            father_name = args[1];
+            email = args[2];
+            phone = args[3];
+
+            try {
+                URL url = new URL(add_data_url);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                String data_String = URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
+                        URLEncoder.encode("father_name","UTF-8")+"="+URLEncoder.encode(father_name,"UTF-8")+"&"+
+                        URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
+                        URLEncoder.encode("phone","UTF-8")+"="+URLEncoder.encode(phone,"UTF-8");
+                Log.d("Mim",data_String);
+                bufferedWriter.write(data_String);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = connection.getInputStream();
+                inputStream.close();
+                connection.disconnect();
+
+            } catch (MalformedURLException e) {
+
+                e.printStackTrace();
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+
+            return "One Row of Data Inserted";
+        }
+
+        protected void onProgressUpdate(){
+
+        }
+
+        protected void onPostExecute(String result){
+        Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
+        }
     }
 
 }

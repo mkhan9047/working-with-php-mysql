@@ -5,5 +5,7 @@ package com.example.mujahid.working_with_php_mysql;
  */
 
 public class Constants {
+
     public static final String DATA_INDICATOR = "android.net.conn.CONNECTIVITY_CHANGE";
+
 }

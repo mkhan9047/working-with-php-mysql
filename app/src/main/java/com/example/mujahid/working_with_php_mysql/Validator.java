@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class Validator {
-    List<EditText> data = new ArrayList<>();
+    private List<EditText> data = new ArrayList<>();
 
     public Validator(List<EditText> texts){
         data = texts;
