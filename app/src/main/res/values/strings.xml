@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">working-with-php-mysql</string>
+    <string name="action_settings">Settings</string>
+</resources>
