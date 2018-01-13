@@ -75,7 +75,6 @@
            android:id="@+id/dataOnindicator"
            android:textSize="15sp"
            android:layout_gravity="start|center_vertical"
-
            android:layout_marginStart="16dp"
            />
 
